@@ -23,7 +23,16 @@ type writer struct {
 
 var (
 	PTN_GIN_debug, _ = regexp.Compile("^\\s*\\[GIN-debug\\]\\s*")
-	PTN_WARNING, _   = regexp.Compile("^\\s*\\[WARNING\\]\\s*")
+	PTN_LEVEL, _     = regexp.Compile("^\\s*\\[(DEBUG|ERROR|INFO|WARNING)\\]\\s*")
+)
+
+var (
+	levels = map[string]zerolog.Level{
+		"DEBUG":   zerolog.DebugLevel,
+		"ERROR":   zerolog.ErrorLevel,
+		"INFO":    zerolog.InfoLevel,
+		"WARNING": zerolog.WarnLevel,
+	}
 )
 
 func (w *writer) Write(p []byte) (n int, err error) {
@@ -33,15 +42,21 @@ func (w *writer) Write(p []byte) (n int, err error) {
 	// For the moment assume that a single Write() call is a single log record.
 	msg := string(p)
 
-	if match := PTN_GIN_debug.FindString(msg); match != "" {
-		level = zerolog.DebugLevel
-		msg = msg[len(match):]
-		sys = "gin"
-	}
-
-	if match := PTN_WARNING.FindString(msg); match != "" {
-		level = zerolog.WarnLevel
-		msg = msg[len(match):]
+	for x := 0; x < 10; x++ { // Don't use infinite for loop for safety
+		// Pull off prefix sequences that represent log information.
+		if match := PTN_GIN_debug.FindString(msg); match != "" {
+			level = zerolog.DebugLevel
+			msg = msg[len(match):]
+			sys = "gin"
+		} else if matches := PTN_LEVEL.FindStringSubmatch(msg); len(matches) > 1 {
+			var ok bool
+			if level, ok = levels[matches[1]]; !ok {
+				return 0, fmt.Errorf("no level %s", matches[1])
+			}
+			msg = msg[len(matches[0]):]
+		} else {
+			break
+		}
 	}
 
 	var event *zerolog.Event
