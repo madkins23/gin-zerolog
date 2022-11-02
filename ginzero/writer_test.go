@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -21,12 +22,21 @@ type WriterTestSuite struct {
 func TestExampleTestSuite(t *testing.T) {
 	gin.DefaultWriter = NewWriter(zerolog.InfoLevel)
 	gin.DefaultErrorWriter = NewWriter(zerolog.ErrorLevel)
+	defer func() {
+		gin.DefaultWriter = os.Stdout
+		gin.DefaultErrorWriter = os.Stderr
+	}()
+
+	// Breakout test suite startup so that GinStartupTest() can be run first.
 	sweet := new(WriterTestSuite)
 	sweet.SetT(t)
 	sweet.GinStartupTest()
+
+	// Run the rest of the tests
 	suite.Run(t, sweet)
 }
 
+// GinStartupTest traps and tests the initial Gin startup warning for debug mode.
 func (suite *WriterTestSuite) GinStartupTest() {
 	suite.testLog(
 		func(t *testing.T) {
@@ -37,12 +47,6 @@ func (suite *WriterTestSuite) GinStartupTest() {
 			assert.Equal(t, "gin", record["sys"])
 			assert.Contains(t, record["message"], "Running in \"debug\" mode.")
 		})
-}
-
-func (suite *WriterTestSuite) SetupTest() {
-}
-
-func (suite *WriterTestSuite) TestExample() {
 }
 
 //////////////////////////////////////////////////////////////////////////

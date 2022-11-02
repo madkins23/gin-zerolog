@@ -8,6 +8,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Logger returns a Gin middleware function that generates a zerolog record for the current request.
+// The record will be generated in the format for which zerolog has been configured.
 func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
