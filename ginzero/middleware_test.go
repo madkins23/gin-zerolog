@@ -72,6 +72,8 @@ func TestLogger(t *testing.T) {
 	fmt.Println(buffer.String())
 }
 
+//////////////////////////////////////////////////////////////////////////
+
 func ExampleLogger() {
 	const port = "55555"
 

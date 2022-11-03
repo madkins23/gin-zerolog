@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -129,4 +130,34 @@ func (suite *WriterTestSuite) testLog(test func(t *testing.T), check func(t *tes
 	fmt.Println("JSON ", buffer.String())
 	suite.Require().NoError(json.Unmarshal(buffer.Bytes(), &record))
 	check(suite.T(), record)
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+func ExampleWriter_Writer() {
+	// Switch zerolog to console mode.
+	zerolog.TimestampFunc = func() time.Time {
+		return time.Now().Local()
+	}
+	log.Logger = log.Output(zerolog.ConsoleWriter{
+		Out:     os.Stdout,
+		NoColor: true,
+		// Don't show duration or time as they mess up the Output comparison.
+		PartsExclude: []string{"time"},
+	})
+
+	gin.DefaultWriter = NewWriter(zerolog.InfoLevel)
+	gin.DefaultErrorWriter = NewWriter(zerolog.ErrorLevel)
+	defer func() {
+		gin.DefaultWriter = os.Stdout
+		gin.DefaultErrorWriter = os.Stderr
+	}()
+	_ = gin.New()
+
+	// Output:
+	// WRN Running in "debug" mode. Switch to "release" mode in production.
+	//  - using env:	export GIN_MODE=release
+	//  - using code:	gin.SetMode(gin.ReleaseMode)
+	//
+	//  sys=gin
 }
