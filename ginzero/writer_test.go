@@ -19,7 +19,7 @@ type WriterTestSuite struct {
 	suite.Suite
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestWriterSuite(t *testing.T) {
 	gin.DefaultWriter = NewWriter(zerolog.InfoLevel)
 	gin.DefaultErrorWriter = NewWriter(zerolog.ErrorLevel)
 	defer func() {
