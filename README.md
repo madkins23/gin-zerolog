@@ -37,6 +37,6 @@ These streams can be replaced with any `IO.Writer` entity.
 
 Trap and redirect these streams to `zerolog` using the following:
 
-    gin.DefaultWriter = NewWriter(zerolog.InfoLevel)
-    gin.DefaultErrorWriter = NewWriter(zerolog.ErrorLevel)
+    gin.DefaultWriter = ginzero.NewWriter(zerolog.InfoLevel)
+    gin.DefaultErrorWriter = ginzero.NewWriter(zerolog.ErrorLevel)
     router := gin.Default() // or gin.New()
