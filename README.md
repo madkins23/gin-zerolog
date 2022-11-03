@@ -15,6 +15,8 @@ There are basic requirements when using `zerolog` within a `gin` application:
 
 # Tools
 
+There is a demo program located in `cmd/demo/demo.go`.
+
 ## Middleware
 
 The basic logging for request traffic in `gin` is generally handled via middleware.
@@ -23,7 +25,7 @@ logging streams with some formatting.
 
 Add the `ginzero` logger using the following:
 
-    router := gin.Default() // or gin.New()
+    router := gin.New() // not gin.Default()
     router.Use(ginzero.Logger())
 
 Add routing configuration after these statements.
@@ -39,4 +41,4 @@ Trap and redirect these streams to `zerolog` using the following:
 
     gin.DefaultWriter = ginzero.NewWriter(zerolog.InfoLevel)
     gin.DefaultErrorWriter = ginzero.NewWriter(zerolog.ErrorLevel)
-    router := gin.Default() // or gin.New()
+    router := gin.New() // or gin.Default() if not using ginzero.Logger()

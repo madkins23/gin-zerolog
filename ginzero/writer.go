@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"strings"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -41,6 +42,7 @@ var (
 		"INFO":    zerolog.InfoLevel,
 		"WARNING": zerolog.WarnLevel,
 	}
+	ptn_GIN, _       = regexp.Compile("^\\s*\\[GIN\\]\\s*")
 	ptn_GIN_debug, _ = regexp.Compile("^\\s*\\[GIN-debug\\]\\s*")
 	ptn_log_level, _ = regexp.Compile("^\\s*\\[(DEBUG|ERROR|INFO|WARNING)\\]\\s*")
 )
@@ -50,12 +52,15 @@ var (
 // TODO: Fix code to handle multiple Write() calls per log record.
 func (w *writer) Write(p []byte) (n int, err error) {
 	level := w.level
-	msg := string(p)
+	msg := strings.TrimRight(string(p), "\n")
 	var sys string
 
 	for x := 0; x < 10; x++ { // Don't use infinite for loop for safety
 		// Pull off prefix sequences that represent log information.
-		if match := ptn_GIN_debug.FindString(msg); match != "" {
+		if match := ptn_GIN.FindString(msg); match != "" {
+			msg = msg[len(match):]
+			sys = "gin"
+		} else if match := ptn_GIN_debug.FindString(msg); match != "" {
 			level = zerolog.DebugLevel
 			msg = msg[len(match):]
 			sys = "gin"
