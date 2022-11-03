@@ -42,6 +42,10 @@ Add the `ginzero` logger using the following:
 
 Add routing configuration after these statements.
 
+Use `gin.New()` instead of `gin.Default()`.
+The latter adds its own logging middleware
+which would conflict with the `ginzero` middleware.
+
 ## IO Writer
 
 There is some `gin` logging of non-request issues that just goes to
