@@ -8,6 +8,11 @@ There are basic requirements when using `zerolog` within a `gin` application:
 * provide an IO writer object to replace the default `gin` logging stream, 
   trap the non-middleware log messages, and redirect them to `zerolog`.
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/madkins23/gin-zerolog)](https://goreportcard.com/report/github.com/madkins23/gin-zerolog)
+![GitHub](https://img.shields.io/github/license/madkins23/gin-zerolog)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/gin-zerolog)
+[![Go Reference](https://pkg.go.dev/badge/github.com/madkins23/gin-zerolog.svg)](https://pkg.go.dev/github.com/madkins23/gin-zerolog)
+
 # Tools
 
 ## Middleware
