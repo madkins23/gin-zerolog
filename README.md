@@ -16,8 +16,22 @@ The basic logging for request traffic in `gin` is generally handled via middlewa
 The existing default middleware sends request data to the default
 logging streams with some formatting.
 
+Add the `ginzero` logger using the following:
+
+    router := gin.Default() // or gin.New()
+    router.Use(ginzero.Logger())
+
+Add routing configuration after these statements.
+
 ## IO Writer
 
-There is a log of `gin` logging of non-request issues that just goes to
+There is some `gin` logging of non-request issues that just goes to
 the default logging streams.
+This mostly happens at startup.
 These streams can be replaced with any `IO.Writer` entity.
+
+Trap and redirect these streams to `zerolog` using the following:
+
+    gin.DefaultWriter = NewWriter(zerolog.InfoLevel)
+    gin.DefaultErrorWriter = NewWriter(zerolog.ErrorLevel)
+    router := gin.Default() // or gin.New()
