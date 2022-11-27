@@ -1,6 +1,11 @@
-# gin-zerolog
+# gin-zerolog ![maintenance-status](https://img.shields.io/badge/maintenance-deprecated-red.svg) [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 Use [`zerolog`](https://github.com/rs/zerolog)
 within [`gin`](https://gin-gonic.com/docs/) applications.
+
+_After I created this program I decided to make it part of a more general set of tools:_
+[gin-utils](https://github.com/madkins23/gin-utils).
+
+**This project is now deprecated.**
 
 There are basic requirements when using `zerolog` within a `gin` application:
 
