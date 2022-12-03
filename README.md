@@ -7,6 +7,8 @@ _After I created this program I decided to make it part of a more general set of
 
 **This project is now deprecated.**
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 There are basic requirements when using `zerolog` within a `gin` application:
 
 * provide a middleware function that writes records via `zerolog` and
