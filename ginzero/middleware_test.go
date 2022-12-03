@@ -127,7 +127,7 @@ func ExampleLogger() {
 		log.Error().Err(err).Interface("response", response).Msg("Ping response")
 	}
 
-	// Shutdown the server.
+	// Interrupt the server.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
